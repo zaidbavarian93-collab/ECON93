@@ -139,9 +139,13 @@ h2::after{content:"";flex:1;height:1px;margin-inline-start:6px;background:linear
 .more{margin:10px 0 0;font-family:var(--f-head);font-size:.95rem}
 #staff{scroll-margin-top:170px}
 .dean{margin-bottom:12px}
+.leaders{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px dashed var(--gold)}
+.leaders>div{display:flex}.leaders>div>*{flex:1}
+.leaders>.c1{grid-column:1}.leaders>.c2{grid-column:2}.leaders>.c3{grid-column:3}.leaders>.c4{grid-column:4}
+@media (max-width:900px){.leaders{grid-template-columns:repeat(2,minmax(0,1fr))}.leaders>div{grid-column:auto!important}}
 .cadre{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 @media (max-width:900px){.cadre{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:560px){.cadre,.lead{grid-template-columns:1fr}}
+@media (max-width:560px){.cadre,.lead,.leaders{grid-template-columns:1fr}}
 
 /* quiz */
 .quiz{background:linear-gradient(160deg,var(--surface-2),var(--surface));border:1px solid var(--gold);border-radius:18px;padding:18px}
@@ -203,7 +207,10 @@ function person(p,badge,key){return `<div class="pc${key?' key':''}">${badge?`<s
 function cadre(){
  $('#staffIc').innerHTML=IC.users;
  const dean=STAFF.find(p=>p.role==='عميد الكلية');
- $('#cadre').innerHTML=`<div class="dean">${person(dean,dean.role,true)}</div><div class="cadre">${STAFF.filter(p=>p!==dean).map(p=>person(p,p.role||'',!!p.role)).join('')}</div>`;
+ const ks=DATA.map(d=>d.k),by=pos=>ks.map((k,i)=>[STAFF.find(p=>p.dept===k&&p.pos===pos),i+1]).filter(x=>x[0]);
+ const rows=[...by('head'),...by('rap')].map(([p,c])=>`<div class="c${c}">${person(p,p.role,true)}</div>`).join('');
+ const rest=STAFF.filter(p=>p!==dean&&!p.dept);
+ $('#cadre').innerHTML=`<div class="dean">${person(dean,dean.role,true)}</div><div class="leaders">${rows}</div><div class="cadre">${rest.map(p=>person(p,p.role||'',!!p.role)).join('')}</div>`;
 }
 function render(d){
  cur=d;
