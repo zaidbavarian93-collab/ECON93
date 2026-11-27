@@ -207,7 +207,7 @@ function person(p,badge,key){return `<div class="pc${key?' key':''}">${badge?`<s
 function cadre(){
  $('#staffIc').innerHTML=IC.users;
  const dean=STAFF.find(p=>p.role==='عميد الكلية');
- const ks=DATA.map(d=>d.k),by=pos=>ks.map((k,i)=>[STAFF.find(p=>p.dept===k&&p.pos===pos),i+1]).filter(x=>x[0]);
+ const ks=['acc','ba','sfb','og'],by=pos=>ks.map((k,i)=>[STAFF.find(p=>p.dept===k&&p.pos===pos),i+1]).filter(x=>x[0]);
  const rows=[...by('head'),...by('rap')].map(([p,c])=>`<div class="c${c}">${person(p,p.role,true)}</div>`).join('');
  const rest=STAFF.filter(p=>p!==dean&&!p.dept);
  $('#cadre').innerHTML=`<div class="dean">${person(dean,dean.role,true)}</div><div class="leaders">${rows}</div><div class="cadre">${rest.map(p=>person(p,p.role||'',!!p.role)).join('')}</div>`;
